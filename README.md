@@ -48,12 +48,19 @@ the interval algorithm and complexity. |
 
 Run the original course BST example:
 
-```sh cd lua lua main.lua ```
+```sh
+cd lua
+lua main.lua
+```
 
 Run the Advent of Code sample input:
 
-```sh cd examples/advent-of-code-2023/day5 cp sample.txt input.txt lua
-solution.lua lua solution_pt2.lua ```
+```sh
+cd examples/advent-of-code-2023/day5
+cp sample.txt input.txt
+lua solution.lua
+lua solution_pt2.lua
+```
 
 The sample answers are `35` for part 1 and `46` for part 2.
 
