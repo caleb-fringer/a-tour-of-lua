@@ -1,3 +1,6 @@
+-- Implementing a Reactive Programming model by following
+-- "Reactive Programming from Scratch (JavaScript) - Ep1" by Christopher Okhravi
+-- https://www.youtube.com/watch?v=zAPTohhQpg0
 local fp = require("fp")
 
 Observable = {
@@ -21,10 +24,13 @@ end
 
 local myObservable = Observable:new()
 local double = function(x) return x * 2 end
-local printDouble = function(x) print(double(x)) end
 
-myObservable:subscribe(print)
-myObservable:subscribe(printDouble)
+myObservable:subscribe(
+    fp.pipe(
+        double,
+        print
+    )
+)
 
 for i = 1, 10 do
     myObservable:emit(i)

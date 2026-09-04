@@ -13,9 +13,9 @@ local map = function(f, xs)
     return result
 end
 
-local pipe = function(f)
+local pipe = function(f, g)
     return function(x)
-        return f(x)
+        return g(f(x))
     end
 end
 
