@@ -24,11 +24,13 @@ end
 
 local myObservable = Observable:new()
 local double = function(x) return x * 2 end
+local tapPrint = fp.tap(print)
 
 myObservable:subscribe(
     fp.pipe(
+        tapPrint,
         double,
-        print
+        tapPrint
     )
 )
 

@@ -13,9 +13,22 @@ local map = function(f, xs)
     return result
 end
 
-local pipe = function(f, g)
+local pipe = function(...)
+    local fs = table.pack(...)
     return function(x)
-        return g(f(x))
+        local result = x
+        for _, f in ipairs(fs) do
+            result = f(result)
+        end
+        return result
+    end
+end
+
+-- Apply f to x (possibly for side-effects), then return x
+local tap = function(f)
+    return function(x)
+        f(x)
+        return x
     end
 end
 
@@ -23,4 +36,5 @@ return {
     thrush = thrush,
     map = map,
     pipe = pipe,
+    tap = tap,
 }
