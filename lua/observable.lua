@@ -52,16 +52,35 @@ function Mapper:emit(x)
     Observable.emit(self, transformed)
 end
 
+Filterer = Observable:new()
+
+function Filterer:new(f)
+    local o = Observable.new(self)
+    o.f = f
+    self.__index = self
+    setmetatable(o, self)
+    return o
+end
+
+function Filterer:emit(x)
+    -- Emit values that satisfy f
+    if self.f(x) then
+        Observable.emit(self, x)
+    end
+end
+
 -- Examples
 local myObservable = Observable:new()
-local double = function(x) return x * 2 end
-
 myObservable:subscribe(print)
 
+local double = function(x) return x * 2 end
 local doubled = myObservable:pipe(Mapper:new(double))
-
 doubled:subscribe(print)
 
-for i = 1, 10 do
+local isPositive = function(x) return x >= 0 end
+local positive = myObservable:pipe(Filterer:new(isPositive))
+positive:subscribe(print)
+
+for i = -5, 5 do
     myObservable:emit(i)
 end
