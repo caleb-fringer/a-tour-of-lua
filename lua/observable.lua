@@ -22,6 +22,12 @@ function Observable:emit(x)
     fp.map(fp.thrush(x), self.subscribers)
 end
 
+function Observable:pipe(other)
+    self:subscribe(function(x)
+        other:emit(x)
+    end)
+end
+
 -- Examples
 local myObservable = Observable:new()
 local double = function(x) return x * 2 end
@@ -33,14 +39,15 @@ myObservable:subscribe(
     )
 )
 
-local myObserver = Observable:new()
-myObservable:subscribe(function(x)
-    myObserver:emit(x)
-end)
+local doubled = Observable:new()
+myObservable:pipe(doubled)
 
-myObserver:subscribe(function(x)
-    print("Doubled: ", 2 * x)
-end)
+doubled:subscribe(
+    fp.pipe(
+        double,
+        tapPrint
+    )
+)
 
 for i = 1, 10 do
     myObservable:emit(i)
