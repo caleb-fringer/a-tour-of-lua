@@ -3,12 +3,12 @@
 -- https://www.youtube.com/watch?v=zAPTohhQpg0
 local fp = require("fp")
 
-Observable = {
-    subscribers = {},
-}
+-- My reactive library
+Observable = {}
 
 function Observable:new(o)
     o = o or {}
+    o.subscribers = {}
     self.__index = self
     setmetatable(o, self)
     return o
@@ -22,17 +22,25 @@ function Observable:emit(x)
     fp.map(fp.thrush(x), self.subscribers)
 end
 
+-- Examples
 local myObservable = Observable:new()
 local double = function(x) return x * 2 end
 local tapPrint = fp.tap(print)
 
 myObservable:subscribe(
     fp.pipe(
-        tapPrint,
-        double,
         tapPrint
     )
 )
+
+local myObserver = Observable:new()
+myObservable:subscribe(function(x)
+    myObserver:emit(x)
+end)
+
+myObserver:subscribe(function(x)
+    print("Doubled: ", 2 * x)
+end)
 
 for i = 1, 10 do
     myObservable:emit(i)
